@@ -13,9 +13,40 @@
 
 ; Aufgabe 1.2
 (define (my-acos x)
-  (cond [(=  0 x) (* 0.5 pi)]
-        [(= -1 x) pi]
-        [else (atan (/ (sqrt (- 1 (expt x 2))) (expt x 2)))]))
+  (cond [(not (<= -1 x 1)) (error "Ungueltige Eingabe - sie muss zwischen -1 und 1 sein.")]
+        [(=  0 x)   (* 0.5 pi)]
+        [(= -1 x)   pi]
+        [(< -1 x 0) (+ pi (atan (/ (sqrt(- 1 (expt x 2))) x)))]
+        [else       (atan (/ (sqrt(- 1 (expt x 2))) x))]))
+; Test daten
+(~a "my-acos(cos(0)  ): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 0)))))
+(~a "   acos(cos(0)  ): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 0)))))
+(~a "my-acos(cos(30) ): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 30)))))
+(~a "   acos(cos(30) ): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 30)))))
+(~a "my-acos(cos(45) ): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 45)))))
+(~a "   acos(cos(45) ): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 45)))))
+(~a "my-acos(cos(60) ): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 60)))))
+(~a "   acos(cos(60) ): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 60)))))
+(~a "my-acos(cos(90) ): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 90)))))
+(~a "   acos(cos(90) ): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 90)))))
+(~a "my-acos(cos(120)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 120)))))
+(~a "   acos(cos(120)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 120)))))
+(~a "my-acos(cos(150)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 150)))))
+(~a "   acos(cos(150)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 150)))))
+(~a "my-acos(cos(180)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 180)))))
+(~a "   acos(cos(180)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 180)))))
+(~a "my-acos(cos(210)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 180)))))
+(~a "   acos(cos(210)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 180)))))
+(~a "my-acos(cos(240)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 240)))))
+(~a "   acos(cos(240)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 240)))))
+(~a "my-acos(cos(270)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 270)))))
+(~a "   acos(cos(270)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 270)))))
+(~a "my-acos(cos(300)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 300)))))
+(~a "   acos(cos(300)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 300)))))
+(~a "my-acos(cos(330)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 330)))))
+(~a "   acos(cos(330)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 330)))))
+(~a "my-acos(cos(360)): " (bogenmass->gradmass (my-acos (cos (gradmass->bogenmass 360)))))
+(~a "   acos(cos(360)): " (bogenmass->gradmass (acos (cos (gradmass->bogenmass 360)))))
 
 ; Aufgabe 1.3
 (define (nm->km x)
@@ -36,7 +67,6 @@
 (~a "Oslo nach Hongkong: " Oslo->Hongkong)
 (~a "San Francisco nach Honolulu: " SanFrancisco->Honolulu)
 (~a "Osterinsel nach Lima: " Osterinsel->Lima)
-
 
 ; Aufgabe 2.2
 
