@@ -1,4 +1,5 @@
 #lang racket
+(require racket/format)
 
 ;Aufgabe 1.1
 
@@ -26,12 +27,18 @@
    (* 60 (bogenmass->gradmass ; in Minuten umwandeln
           (my-acos            ; dG
            (+ (* (sin (gradmass->bogenmass latA)) (sin (gradmass->bogenmass latB)))
-              (* (cos (gradmass->bogenmass latA)) (cos (gradmass->bogenmass latB)) (cos (- longA longB)))))))))
+              (* (cos (gradmass->bogenmass latA)) (cos (gradmass->bogenmass latB)) (cos (- (gradmass->bogenmass longA) (gradmass->bogenmass longB))))))))))
 
 (define Oslo->Hongkong (distanzAB 59.93 10.75 22.20 114.10))
 (define SanFrancisco->Honolulu (distanzAB 37.75 -122.45 21.32 -157.83))
 (define Osterinsel->Lima (distanzAB -27.10 -109.40 -12.10 -77.05))
 
-; Aufgabe 2.2s
+(~a "Oslo nach Hongkong: " Oslo->Hongkong)
+(~a "San Francisco nach Honolulu: " SanFrancisco->Honolulu)
+(~a "Osterinsel nach Lima: " Osterinsel->Lima)
+
+
+; Aufgabe 2.2
+
 
 ; Aufgabe 2.3
