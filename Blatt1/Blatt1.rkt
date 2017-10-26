@@ -53,12 +53,14 @@
   (* x 1.852))
 
 ; Aufgabe 2.1
+(define (dG latA longA latB longB)
+  (my-acos
+   (+ (* (sin (gradmass->bogenmass latA)) (sin (gradmass->bogenmass latB)))
+      (* (cos (gradmass->bogenmass latA)) (cos (gradmass->bogenmass latB)) (cos (- (gradmass->bogenmass longA) (gradmass->bogenmass longB)))))))
 (define (distanzAB latA longA latB longB)
   (nm->km                     ; seemeilen in km umwandeln
    (* 60 (bogenmass->gradmass ; in Minuten umwandeln
-          (my-acos            ; dG
-           (+ (* (sin (gradmass->bogenmass latA)) (sin (gradmass->bogenmass latB)))
-              (* (cos (gradmass->bogenmass latA)) (cos (gradmass->bogenmass latB)) (cos (- (gradmass->bogenmass longA) (gradmass->bogenmass longB))))))))))
+          (dG latA longA latB longB)))))
 
 (define Oslo->Hongkong (distanzAB 59.93 10.75 22.20 114.10))
 (define SanFrancisco->Honolulu (distanzAB 37.75 -122.45 21.32 -157.83))
@@ -69,6 +71,17 @@
 (~a "Osterinsel nach Lima: " Osterinsel->Lima)
 
 ; Aufgabe 2.2
+(define (kurs latA longA latB longB)
+  (bogenmass->gradmass
+   (my-acos
+    (/ (- (sin (gradmass->bogenmass latB)) (* (cos (dG latA longA latB longB)) (sin (gradmass->bogenmass latA))))
+       (* (cos (gradmass->bogenmass latA)) (sin (dG latA longA latB longB)))))))
 
+(define Kurs-Oslo->Hongkong (kurs 59.93 10.75 22.20 114.10))
+(define Kurs-SanFrancisco->Honolulu (kurs 37.75 -122.45 21.32 -157.83))
+(define Kurs-Osterinsel->Lima (kurs -27.10 -109.40 -12.10 -77.05))
+(~a "Kurs Oslo nach Hongkong: " Kurs-Oslo->Hongkong)
+(~a "Kurs San Francisco nach Honolulu: " (- 360 Kurs-SanFrancisco->Honolulu))
+(~a "Kurs Osterinsel nach Lima: " Kurs-Osterinsel->Lima)
 
 ; Aufgabe 2.3
