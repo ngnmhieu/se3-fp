@@ -1,5 +1,6 @@
 #lang racket
 (require racket/format)
+(read-case-sensitive #t)
 
 ;Aufgabe 1.1
 
