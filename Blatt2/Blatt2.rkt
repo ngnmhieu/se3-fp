@@ -113,3 +113,36 @@ _____________________________________________
 
 
 ; Aufgabe 3
+(define (type-of typ)
+  (cond
+    [(boolean? typ)   "Boolean"]
+    [(pair? typ)      "Pair"]
+    [(list? typ)      "List"]
+    [(symbol? typ)    "Symbol"]
+    [(number? typ)    "Number"]
+    [(char? typ)      "Char"]
+    [(string? typ)    "String"]
+    [(vector? typ)    "Vector"]
+    [(procedure? typ) "Procedure"]))
+
+(~a "Aufgabe 3: ")
+
+(type-of (* 2 3 4 ))
+; Number -> da bei der Multiplikation von Zahlen wieder eine Zahl heraus kommt.
+(type-of (not 42))
+; Boolean -> mit not kommt entweder heraus das 42 wahr oder falsch ist.
+(type-of '(eins zwei drei))
+; Pair -> Jede Liste ist auch ein Paar.
+(type-of '())
+; List -> es handelt sich um eine leere Liste mit der Länge 0. Diese ist eindeutig eine Liste und kann kein Paar sein. 
+(define (id z)z)
+(type-of (id sin))
+; Procedure -> ???
+(type-of (string-ref "SE3" 2))
+; Char -> aus dem String "SE3" ist das 2. Element ein Zeichen(Char)
+(type-of (lambda (x)x))
+; Procedure -> bei lambda handelt es sich um eine Funktion.
+(type-of type-of )
+; Procedure -> type-of wurde von uns als Funktion definiert.
+(type-of (type-of type-of))
+; String -> Der Typ von type-of ist "Procedure", dies wiederum ist ein String.
