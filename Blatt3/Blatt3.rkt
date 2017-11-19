@@ -1,5 +1,6 @@
 #lang racket
 (require racket/gui/base)
+(require se3-bib/flaggen-module)
 
 ; Aufgabe 1.1
 (define tafel
@@ -55,6 +56,66 @@
               (if (empty? textchars) '()
                   (cons (buchstabe->schluessel (car textchars)) (_codierung (cdr textchars)))))])
 (_codierung (string->list text))))
+
+; Aufgabe 2.1
+; Assoziationslisten, sind Listen aus Paaren. Sie können leicht mit assoc, mit Angabe eines Schlüssels, durchsucht werden.
+(define flaggenalfabet
+  '((#\A A)
+    (#\B B)
+    (#\C C)
+    (#\D D)
+    (#\E E)
+    (#\F F)
+    (#\G G)
+    (#\H H)
+    (#\I I)
+    (#\J J)
+    (#\K K)
+    (#\L L)
+    (#\M M)
+    (#\N N)
+    (#\O O)
+    (#\P P)
+    (#\Q Q)
+    (#\R R)
+    (#\S S)
+    (#\T T)
+    (#\U U)
+    (#\V V)
+    (#\W W)
+    (#\X X)
+    (#\Y Y)
+    (#\Z Z)
+    (#\0 Z0)
+    (#\1 Z1)
+    (#\2 Z2)
+    (#\3 Z3)
+    (#\4 Z4)
+    (#\5 Z5)
+    (#\6 Z6)
+    (#\7 Z7)
+    (#\8 Z8)
+    (#\9 Z9)))
+
+; Aufgabe 2.2
+; Funktion, die einen Buchstaben (Typ char) mittels der Flaggentafel auf das Bild der Flagge abbildet:
+(define (bs->flagge bs)
+  (eval                             ; Wertet zweites Element aus Paar aus und liefert die Flagge als Wert aus der importierten se3-bib
+   (cadr                            ; cadr->(car (cdr y )) gibt das 2. Element.
+    (assoc bs flaggenalfabet))))    ; assoc durchsucht Liste von Listen (flaggenalfabet), nach einem Paar, wessen erstes Element gleich dem schlüssel ist (bs) 
+
+; Aufagbe 2.3
+; Funktion die nach Außen hin aus einem String eine Liste aus Flaggen erstellt, aber eigentlich aus dem übergebenen String eine Liste aus Chars macht
+; und aus dieser Liste, mit Hilfe einer anderen Fkt. "bsChar->flaggen" eine Flaggenliste erstellt.
+(define (bsString->flaggen bsString)
+  (bsChar->flaggen (string->list bsString)))
+
+; Hilfsfunktion, die aus einer gegebenen Liste aus chars eine Liste aus Flaggen erstellt.
+(define (bsChar->flaggen bsChar)
+  (if (empty? bsChar) #f                       
+      (cons(bs->flagge (car bsChar))            ; sonst: erstelle eine Flaggen-Liste mit dem ersten Element der Char-Liste...   
+           (bsChar->flaggen (cdr bsChar)))))    ; ...und rufe dich erneut auf um die weiteren Elemente der Char-Liste der Flaggen-Liste hinzuzufügen.    
+
 
 ; Aufgabe 3.1
 ; Returns
