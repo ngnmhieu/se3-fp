@@ -44,3 +44,47 @@
 ; -> #f
 ; eq? gilt für identische Objekte. Die beiden Listen sind aber nicht identisch.
 ; (list 'Rudolph 'the 'red-nosed 'reindeer)->'(Rudolph the red-nosed reindeer) vs. '(Rudolph the 'red-nosed 'reindeer)<-(cons 'Rudolph '(the 'red-nosed 'reindeer))
+
+;AUFGABE 3.1
+; Erkären Sie den Unterschied zwischen innerer Reduktion und äußerer Reduktion:
+
+; bei der inneren Reduktion werden die Terme von innen nach außen reduziert, somit werden zuerst die inneren Klammern und Funktionen ausgewertet und erst später die äußeren.
+; bei der äußeren Redunktion werden die Terme von außen nach innen reduziert, somit werden zuerst die äußeren Funktionen und Klammern ausgewertet und erst später die inneren.
+
+;zeigen Sie beispielhaft die Auswertung des Ausdrucks mit beiden Reduktionsstrategien: 
+;(hoch3 (+ 3 (hoch3 3)))
+;mit
+;(define (hoch3 x) (* x x x ))
+
+innere Reduktion:
+-> (hoch3 (+ 3 (hoch3 3)))
+-> (hoch3 (+ 3 (* 3 3 3)))
+-> (hoch3 (+ 3 27))
+-> (hoch3 30)
+-> (* 30 30 30)
+-> 27000
+
+äußere Reduktion:
+-> (hoch3 (+ 3 (hoch3 3)))
+-> (* (+ 3 (hoch3 3)) (+ 3 (hoch3 3)) (+ 3 (hoch3 3)))
+-> (* (+ 3 (* 3 3 3)) (+ 3 (hoch3 3)) (+ 3 (hoch3 3)))
+-> (* (+ 3 27) (+ 3 (hoch3 3)) (+ 3 (hoch3 3)))
+-> (* 30 (+ 3 (hoch3 3)) (+ 3 (hoch3 3)))
+-> (* 30 (+ 3 (* 3 3 3)) (+ 3 (hoch3 3)))
+-> (* 30 (+ 3 27) (+ 3 (hoch3 3)))
+-> (* 30 30 (+ 3 (hoch3 3)))
+-> (* 30 30 (+ 3 (* 3 3 3)))
+-> (* 30 30 (+ 3 27))
+-> (* 30 30 30)
+-> 27000
+
+;AUFGABE 3.2
+;Welche Reduktionsstrategie wird in Racket für Funktionen angewendetund welche für Spezialformen:
+; In Racket wird die innere Reduktion auf Funktionen angewandt. Spezialformen werden allerdings von links nach rechts, mit der äußeren Reduktion ausgewertet.
+
+
+;AUFGABE 3.3
+; Bei selbstgeschriebenen Funktionen werden diese wie in 3.2 beschrieben nach der inneren Reduktion ausgewertet. In dem angegebenen Beispiel wird mit dem
+; new-if eine condition geprüft. Allerdings ,durch die innere Reduktion, erst nachdem "else-clause" ausgeührt wurde. Das if ist dafür da bestimmte
+; Fälle möglichst schnell abzufangen und ein Ergebnis zu liefern. Bei der eigens defineirten new-if Funktion ist unnötiger Rechenaufwand vorhanden. Dashalb sind
+; für bestimmte Kontrollstrukturen Spezialformen sehr hilfreich.
