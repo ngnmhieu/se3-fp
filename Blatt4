@@ -1,0 +1,46 @@
+#lang racket
+
+; Aufgabe 1
+
+; 1. (Bitte beachten Sie die besondere Form der Quotierung!)
+(max (min 5 (- 8 7)) 6)
+; -> 6
+; das min von 5 und 8-7=1 ist Zwischenergebnis: 1. Das max von 1 und 6 ist das Endergebnis: 6.
+
+; 2.
+'(+ ,(- 13 11) 17)
+; -> '(+ ,(- 13 11) 17)
+; die Evaluierung wird durch das Quotierungszeichen blockiert. 
+
+; 3.
+(cadr '(Good King Wenceslas))
+; -> King
+; das zweite Element der Liste (Good King Wenceslas) ist "King". (cadr) gibt das zweite Element einer Liste zurück.
+
+; 4.
+(cdddr '(looked out (On the feast of Steven)))
+; -> '()
+; ???
+
+; 5.
+(cons 'When '(the snow lay round about))
+; -> '(When the snow lay round about)
+; cons konstruiert eine Liste aus dem Element "When" (der Kopf der Liste) und der Liste (the snow lay round about) (der Körper der Liste.
+
+; 6.
+(cons '(Deep and) 'crisp)
+; -> '((Deep and) . crisp)
+; hier werden mit der cons-Funktion die beiden Elemente zu einem Paar (dotted pair) verknüpft.
+
+; 7.
+(equal? (list 'and 'even) '(and even))
+; -> #t
+; die Funktion list verknüpft Elemente beliebigen Typs zu einer Liste. Hier werden also verglichen:
+; (list 'and 'even)-> '(and even) und '(and even).
+
+; 8.
+(eq? (list 'Rudolph 'the 'red-nosed 'reindeer)
+     (cons 'Rudolph '(the 'red-nosed 'reindeer)))
+; -> #f
+; eq? gilt für identische Objekte. Die beiden Listen sind aber nicht identisch.
+; (list 'Rudolph 'the 'red-nosed 'reindeer)->'(Rudolph the red-nosed reindeer) vs. '(Rudolph the 'red-nosed 'reindeer)<-(cons 'Rudolph '(the 'red-nosed 'reindeer))
