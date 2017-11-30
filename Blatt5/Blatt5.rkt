@@ -4,6 +4,7 @@
 
 (define-struct butterfly (fluegelfarbe musterung fuehlerform fluegelform))
 
+; Datenstruktur zur Speicherung von Merkmaltypen
 (define Musterungen '(star dots stripes))
 (define Fluegelfarben '(blue green yellow red))
 (define Fuehlerformen '(curved curly straight))
