@@ -1,0 +1,81 @@
+Ziel: Angabe der dominaten Merkmale zweier Eltern + Kinderzahl -> generieren Kinder.
+
+Generierung der Eltern:
+  Die rezessiven Merkmale der Eltern zufällig,
+  aber unter Beachtung der Dominanzregeln hinzugefügt.
+
+Generierung der Kinder:
+  Ein Schmetterling erbt für jeden Merkmalstyp der
+  Eltern zufällig je eines von deren zwei Merkmalen
+  (ein von Mutter und ein von Vater)
+
+Merkmaltypen:
+ - Musterung
+ - Flügelfarbe
+ - Fühlerform
+ - Flügelform
+
+Zu jeden Merkmaltypen werden Dominanzregeln definiert...
+
+Jeder Schmetterling hat z.B.
+ - Musterung: Sterne (dominant) und Streifen (rezessiv)
+ - Flügelfarbe: gelb (dominant) und rot (rezessiv)
+ - Fühlerform: gekrümmt (dominant) und gerade (rezessiv)
+ - Flügelform: rhombisch (dominant) und hexagonal (rezessiv)
+
+Aufgabe 1.1
+Man kann für jeden Merkmaltyp eine Liste als Datenstruktur verwenden.
+Die Merkmale haben einer linearen Ordnung, d.h. jedes Merkmal eines Merkmaltyps
+hat einen Vorgänger und Nachfolger (außer des allerersten und allerletzten).
+z.B. '(blau gruen gelb rot)
+
+Um zwei Merkmale auf Dominanz zu vergleichen kann man die Liste durchgehen, 
+dasjenige Merkmal das erst eingetroffen ist, ist das dominante Merkmal.
+
+Die möglichen rezessive Gene eines Merkmals lassen sich als den Rest
+der Liste mit dem dominanten Merkmal als erstes Element.
+
+Aufgabe 2.2
+Man kann als Datenstruktur zur Repräsentation eines Schmitterlings
+einen Verbund (structure) verwenden.
+
+Dieser Verbund hat für jeden Merkmaltyp einen Feld von Typ Paare (Pair).
+Diese Paare speichern als erstes Element das dominante Merkmal und zweites
+Element das rezessive Merkmal.
+
+Aufgabe 2.3
+
+; Einen Schmetterling generieren mit dominanten Merkmalen
+; die rezessiven Merkmalen werden zufaellig generiert.
+; Gibt einen Schmetterling-Verbund zurueck.
+
+; (gen-butt
+;   musterung - dominante Musterung (symbol)
+;   fluegelfarbe - dominante Fluegelfarbe (symbol)
+;   fuehlerform - dominante Fuehlerform  (symbol)
+;   fluegelform - dominante Fluegelform (symbol)
+; )
+(define (gen-butt musterung fluegelfarbe fuehlerform fluegelform) "")
+
+; Kinder aus den Schmetterling-Eltern generieren
+; und gibt eine liste von Kindern zurueck
+; (gen-kinder
+;    n - Anzahl von Kinder (number)
+;    vater - Vater der Kinder (butterfly)
+;    mutter - Mutter der Kinder (butterfly)
+; )
+(define (gen-kinder n vater mutter) "")
+
+; Zwei Merkmal auf Dominanz vergleichen
+; und gibt einen booleschen Wert zurueck.
+; Wenn zwei Merkmale nicht von demselben Typ sind
+; wird #f zurueckgegeben
+(define (cmp-merkmal typ m1 m2) "")
+
+; Gibt eine Liste von rezessive Merkmale eines
+; dominanten Merkmals zurueck
+; (rezessiv-merkmale
+;   typ         - ein von '(Musterungen Fluegelfarben Fluegelform Fuehlerform)
+;   dom-merkmal - das dominante Merkmal
+; )
+(define (rezessiv-merkmale typ dom-merkmal) "")
