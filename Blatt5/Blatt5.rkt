@@ -38,13 +38,6 @@
 ; Wenn zwei Merkmale nicht von demselben Typ sind
 ; wird #f zurueckgegeben
 ; Falls m1 und m2 gleich sind dann #t
-  ; ([member? (lambda (item xs)
-  ;             (if
-  ;               (or (null? xs)
-  ;                   (empty? xs)) #f
-  ;               (or (equal? item (car xs))
-  ;                   (member? item (cdr xs)))))])
-
 (define (member? x xs)
   (if (or (null? xs)
           (empty? xs)) #f
