@@ -27,17 +27,18 @@
 (equal? 0 (zaehlen-endrek 1 '()))
 
 ; f ist ein Lambda der ein Element und eine Liste aufnimmt und gibt #t oder #f zurueck.
-(define (zaehlen-custom f x xs)
-  (letrec ([zaehlen (lambda (x xs acc)
-      (if (empty? xs) acc ; Endergebnis zurueckgeben falls Liste leer
-        (zaehlen x (cdr xs) ; ruft zahlen rekursiv mit dem neuen Wert von acc
-                 (+ acc (if (f x (car xs)) 1 0)))))])
-    (zaehlen x xs 0)))
+; TODO: benutze Funktion höhere Ordnung in der Vorlesung
+; (define (zaehlen-custom f x xs)
+;   (letrec ([zaehlen (lambda (x xs acc)
+;       (if (empty? xs) acc ; Endergebnis zurueckgeben falls Liste leer
+;         (zaehlen x (cdr xs) ; ruft zahlen rekursiv mit dem neuen Wert von acc
+;                  (+ acc (if (f x (car xs)) 1 0)))))])
+;     (zaehlen x xs 0)))
 ; Testdaten
 (display "Test zahlen-custom\n")
-(equal? 2 (zaehlen-custom equal? 1 '(1 2 3 4 5 6 1)))
-(equal? 2 (zaehlen-custom > 3 '(1 2 3 4 5 6)))
-(equal? 3 (zaehlen-custom < 3 '(1 2 3 4 5 6)))
+; (equal? 2 (zaehlen-custom equal? 1 '(1 2 3 4 5 6 1)))
+; (equal? 2 (zaehlen-custom > 3 '(1 2 3 4 5 6)))
+; (equal? 3 (zaehlen-custom < 3 '(1 2 3 4 5 6)))
 
 ; Aufgabe 2
 
