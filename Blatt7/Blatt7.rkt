@@ -114,3 +114,26 @@
     #(#f #f #f #f #f #f #f #f #f #f)
     #(#f #f #f #f #f #f #f #f #f #f)))
 (display-spiel sample-spiel)
+
+
+ Aufgabe 2.3
+; eine Funktion die für einen beliebigen Index des Spielzustandes die Werte der Nachbarschaft ermittelt
+(define (WerteDerNachbarn vector y x)
+   (if (>= 0 x y 9) '()
+       (Auswerten
+        (list
+         (vector-ref (vector-ref vector (- y 1)) (- x 1))
+         (vector-ref (vector-ref vector (- y 1)) x)
+         (vector-ref (vector-ref vector (- y 1)) (+ x 1))
+         (vector-ref (vector-ref vector y) (+ x 1))
+         (vector-ref (vector-ref vector (+ y 1)) (+ x 1))
+         (vector-ref (vector-ref vector (+ y 1)) x)
+         (vector-ref (vector-ref vector (+ y 1)) (- x 1))
+         (vector-ref (vector-ref vector y) (- x 1))))))    
+
+; anhand der WerteDerNAchbarn den Folgezustand bestimmen: schwarz oder umrandet.
+(define (Auswerten list)
+  (if (null? list) '()
+      (if (= 3 (count identity list)) ; ToDo: dann lebt Zelle weiter
+          (if (<= (count identity list)2) ; ToDo: dann stirbt Zelle
+              (if (>= (count identity list) 4) ; ToDo: dann stirbt Zelle
