@@ -1,6 +1,7 @@
 #lang racket
 
 (require 2htdp/image)
+(require 2htdp/universe)
 
 ; Aufgabe 1
 
@@ -43,7 +44,7 @@
 ; Aufgabe 2
 
 ; N ist die Größe des Spiels (Konstante)
-(define N 30)
+(define N 10)
 
 ; Aufgabe 2.1
 
@@ -102,7 +103,7 @@
 
 ; Testdaten
 (display "Test display-spiel\n")
-(define sample-spiel
+(define glieder-spiel
   #(#(#f #t #f #f #f #f #f #f #f #f)
     #(#f #f #t #f #f #f #f #f #f #f)
     #(#t #t #t #f #f #f #f #f #f #f)
@@ -113,27 +114,73 @@
     #(#f #f #f #f #f #f #f #f #f #f)
     #(#f #f #f #f #f #f #f #f #f #f)
     #(#f #f #f #f #f #f #f #f #f #f)))
-(display-spiel sample-spiel)
+(display-spiel glieder-spiel)
+
+(define simple-spiel
+  #(#(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #t #t #t #f #f #f)
+    #(#f #f #f #t #t #t #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)
+    #(#f #f #f #f #f #f #f #f #f #f)))
+(display-spiel glieder-spiel)
 
 
- Aufgabe 2.3
+; Aufgabe 2.3
+(define (get-zelle spiel y x)  ; den Wert der Zelle zurueckliefert, falls es nicht im Feld, #f
+  (if (and (<= 0 x (- N 1)) (<= 0 y (- N 1)))
+    (vector-ref (vector-ref spiel y) x)
+    #f))
+
 ; eine Funktion die für einen beliebigen Index des Spielzustandes die Werte der Nachbarschaft ermittelt
-(define (WerteDerNachbarn vector y x)
-   (if (>= 0 x y 9) '()
-       (Auswerten
-        (list
-         (vector-ref (vector-ref vector (- y 1)) (- x 1))
-         (vector-ref (vector-ref vector (- y 1)) x)
-         (vector-ref (vector-ref vector (- y 1)) (+ x 1))
-         (vector-ref (vector-ref vector y) (+ x 1))
-         (vector-ref (vector-ref vector (+ y 1)) (+ x 1))
-         (vector-ref (vector-ref vector (+ y 1)) x)
-         (vector-ref (vector-ref vector (+ y 1)) (- x 1))
-         (vector-ref (vector-ref vector y) (- x 1))))))    
+(define (nachbarn-werte spiel y x)
+  (if (>= 0 x y N) '()
+    (list
+      (get-zelle spiel (- y 1) (- x 1))
+      (get-zelle spiel (- y 1)    x   )
+      (get-zelle spiel (- y 1) (+ x 1))
+      (get-zelle spiel    y    (+ x 1))
+      (get-zelle spiel (+ y 1) (+ x 1))
+      (get-zelle spiel (+ y 1)    x   )
+      (get-zelle spiel (+ y 1) (- x 1))
+      (get-zelle spiel    y    (- x 1)))))
+; Testdaten
+(~a "(nachbarn-werte glieder-spiel 0 0): " (nachbarn-werte glieder-spiel 0 0))
+(~a "(nachbarn-werte glieder-spiel 1 0): " (nachbarn-werte glieder-spiel 1 0))
+(~a "(nachbarn-werte glieder-spiel 2 2): " (nachbarn-werte glieder-spiel 2 2))
 
-; anhand der WerteDerNAchbarn den Folgezustand bestimmen: schwarz oder umrandet.
-(define (Auswerten list)
-  (if (null? list) '()
-      (if (= 3 (count identity list)) ; ToDo: dann lebt Zelle weiter
-          (if (<= (count identity list)2) ; ToDo: dann stirbt Zelle
-              (if (>= (count identity list) 4) ; ToDo: dann stirbt Zelle
+
+; eine Funktion, die die Werte dieser 8er-Nachbarschaft erhält, und ge- mäß den Spielregeln den Folgezustand des Automaten am übergebenen Index bestimmt
+(define (lebt-oder-tot spiel y x)
+  (let ([lebende (count identity (nachbarn-werte spiel y x))])
+    (cond
+      [(equal? 3 lebende) #t]
+      [(< lebende 2) #f]
+      [(> lebende 3) #f]
+      [else (get-zelle spiel y x)])))
+
+; Testdaten
+(~a "(lebt-oder-tot glieder-spiel 0 0): " (lebt-oder-tot glieder-spiel 0 0))
+(~a "(lebt-oder-tot glieder-spiel 1 0): " (lebt-oder-tot glieder-spiel 1 0))
+(~a "(lebt-oder-tot glieder-spiel 2 2): " (lebt-oder-tot glieder-spiel 2 2))
+
+(define (next-spiel spiel)
+  (let ([new-zeile
+          (lambda (y)
+            (list->vector (map
+              (lambda (x) (lebt-oder-tot spiel y x))
+              (range 0 N))))])
+  (list->vector (map new-zeile (range 0 N)))))
+
+(big-bang glieder-spiel
+          (to-draw display-spiel)
+          (on-tick next-spiel 0.25))
+
+(big-bang simple-spiel
+          (to-draw display-spiel)
+          (on-tick next-spiel 0.25))
+
