@@ -1,3 +1,5 @@
+#lang racket 
+
 ; Aufgabe 1.1
 ; Eine Funktion eine Funktion höherer Ordnung, wenn sie Funktionen als
 ; Argumente erhält oder Funktion als Rückgabewert hat.
@@ -25,9 +27,11 @@
 
 ; Aufgabe 1.4
 ; (foldl (curry + 2) 3 '(3 4 5))
-;   Ergebnis: 21
-;   (curry + 2)  liefert eine Addition-Funktion zurück, die bei jedem Aufruf 2 zu dem Ergebnis addiert.
-;   foldl wendet die dann an allen Elementen der Liste zusammen mit dem Initialwert, liefert als Ergebnis 21.
+;   Ergebnis: 21.
+;   `(curry + 2)` liefert eine Addition-Funktion zurück, die bei jedem Aufruf 2
+;   zu dem Ergebnis addiert.
+;   `foldl` wendet die dann an allen Elementen der Liste zusammen mit dem
+;   Initialwert, liefert als Ergebnis 21.
 ;
 ; (map gerade−oder−ungerade '(4 587 74 69 969 97 459 4))
 ;   Ergebnis: '(ungerade gerade ungerade gerade gerade gerade gerade ungerade)
@@ -45,17 +49,50 @@
 ; ((compose (curry foldl + 0) (curry filter (curryr < 0))) '(5682 48 24915 -45 -6 48))
 ;   1. (curry (foldl + 0))         -> Addiert alle Zahlen in der Liste
 ;   2. (curry filter (curryr < 0)) -> Funktion die alle negativen Zahlen filtert.
-;   `compose` kombiniert dann die zwei Funktionen. Die letzte Funktion wird erst ausgeführt mit
-;   der Liste als Argument. Das Ergebnis davon dient als Argument für den Aufruf der ersten Funktion.
+;   `compose` kombiniert dann die zwei Funktionen. Die letzte Funktion wird
+;   erst ausgeführt mit der Liste als Argument. Das Ergebnis davon dient als
+;   Argument für den Aufruf der ersten Funktion.
 ;   Ergebnis: -51
 
 ; Aufgabe 2.1
+(define (square-list xs) (map (lambda (x) (* x x)) xs))
+; Testdaten
+(display "square-list: \n")
+(square-list '())
+(square-list '(5))
+(square-list '(1 2 3 4))
 
 ; Aufgabe 2.2
+(define (teilbar-9-oder-11 xs)
+  (let ([teilbar (lambda (x y) (equal? 0 (modulo x y)))])
+    (filter
+      (lambda (x) (or (teilbar x 11) (teilbar x 9))) xs)))
+; Testdaten
+(display "teilbar-9-oder-11: \n")
+(teilbar-9-oder-11 '())
+(teilbar-9-oder-11 '(9 1 2 3 4))
+(teilbar-9-oder-11 '(11 12 13 14))
+(teilbar-9-oder-11 '(0 9 11 99 1089))
 
 ; Aufgabe 2.3
+(define (ungerade-groesser-6 xs)
+  ((compose
+    (curry foldl + 0)
+    (curry filter (curry < 6))
+    (curry filter odd?)) xs))
+; Testdaten
+(display "ungerade-groesser-6: \n")
+(ungerade-groesser-6 '(1 2 3 4 5 6 7 8 9 10 11 12))
 
 ; Aufgabe 2.4
+(define (list-split f xs)
+  (list
+    (filter f xs) 
+    (filter (compose not f) xs)))
+
+(display "list-split: \n")
+(list-split odd? '(0 1 2 3 4 5 6 7 8 9))
+(list-split even? '(0 1 2 3 4 5 6 7 8 9))
 
 ; Aufgabe 3.1
 
