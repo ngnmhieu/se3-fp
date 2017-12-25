@@ -5,14 +5,14 @@
 # f nimmt ein Argument auf
 (map f xs) -> f(xs)
 
-# fold geht von links nach rechts und wendet f auf jedes einzelne
+# foldl geht von links nach rechts und wendet f auf jedes einzelne
 # Element in der Liste und aggregiert das Ergebnis zu dem Startwert s
 # f = (lambda (x acc))
-(fold f s xs) -> x 
+(foldl f s xs) -> x 
 # man kann fold sogar mehrere Liste übergeben, dann hat f extra Parameter für
 # die aktuellen Elemente dieser Liste
-# f = (lambda (xs1 xs2 xs3 acc))
-(fold f s x1 x2 x3) -> x
+# f = (lambda (x1 x2 x3 acc))
+(foldl f s xs1 xs2 xs3) -> x
 
 # filter gibt alle Elemente der Liste zurück, die dazu führt dass f zu #t ausgewertet wird
 (filter f xs) -> gefilterte xs
