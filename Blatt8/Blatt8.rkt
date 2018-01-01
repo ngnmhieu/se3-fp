@@ -1,9 +1,10 @@
 #lang racket 
 
+; (require se3-bib/setkarten-module)
+
 ; Aufgabe 1.1
 ; Eine Funktion eine Funktion höherer Ordnung, wenn sie Funktionen als
 ; Argumente erhält oder Funktion als Rückgabewert hat.
-
 ; Aufgabe 1.2
 ; a) `gerade-oder-ungegrade` ist keine Funktion höherer Ordnung.
 ; b) `map` ist eine Funktion höherer Ordung. `map` erhält als Argumente eine
@@ -57,6 +58,7 @@
 ; Aufgabe 2.1
 (define (square-list xs) (map (lambda (x) (* x x)) xs))
 ; Testdaten
+(display "\n## Aufgabe 2.3 ##\n")
 (display "square-list: \n")
 (square-list '())
 (square-list '(5))
@@ -68,6 +70,7 @@
     (filter
       (lambda (x) (or (teilbar x 11) (teilbar x 9))) xs)))
 ; Testdaten
+(display "\n## Aufgabe 2.3 ##\n")
 (display "teilbar-9-oder-11: \n")
 (teilbar-9-oder-11 '())
 (teilbar-9-oder-11 '(9 1 2 3 4))
@@ -81,6 +84,7 @@
     (curry filter (curry < 6))
     (curry filter odd?)) xs))
 ; Testdaten
+(display "\n## Aufgabe 2.3 ##\n")
 (display "ungerade-groesser-6: \n")
 (ungerade-groesser-6 '(1 2 3 4 5 6 7 8 9 10 11 12))
 
@@ -90,14 +94,80 @@
     (filter f xs) 
     (filter (compose not f) xs)))
 
+(display "\n## Aufgabe 2.4 ##\n")
 (display "list-split: \n")
 (list-split odd? '(0 1 2 3 4 5 6 7 8 9))
 (list-split even? '(0 1 2 3 4 5 6 7 8 9))
 
 ; Aufgabe 3.1
 
+; Verfuegbare Eigenschaften
+(define Number  '(1 2 3))
+(define Pattern '(waves oval rectangle))
+(define Mode    '(outline solid hatched))
+(define Color   '(red green blue))
+
+; Repräsentation einer Spielkarte
+; Funktionen höherer Ordnung lassen sich leichter
+; mit Listen anwenden. Die Representation der Eigenschaften
+; einer Spielkarte ist also eine Liste mit folgender Struktur:
+; '(Number Pattern Mode Color)
+(define sample-cards '(3 waves outline red))
+
 ; Aufgabe 3.2
+(define all-cards
+  ; for each element in xs addCombinationOf generates
+  ; all combinations of that element with the given
+  ; list of objects
+  (let ([addCombinationOf
+          (lambda (objects xs)
+            (foldl (lambda (partial result) ; iterate over all elements
+                     (append result         ; generate new elements with the objects
+                             (map (lambda (n) (cons n partial)) objects))) '() xs))])
+    (addCombinationOf
+      Number
+      (addCombinationOf
+        Pattern
+        (addCombinationOf
+          Mode
+          (addCombinationOf Color (list '())))))))
+
+(display "\n## Aufgabe 3.2 ##\n")
+(~a "All cards (" (length all-cards) "): " all-cards)
 
 ; Aufgabe 3.3
+(define (member? x xs)
+  (if (or (null? xs)
+          (empty? xs)) #f
+      (or (equal? x (car xs)) (member? x (cdr xs)))))
+
+(define (is-a-set? card) (letrec ([all-same-or-diff?  (lambda (x y z acc)
+               (and acc
+                    (or (and (equal? x y) (equal? y z))
+                        (not (or (equal? x y) (equal? y z) (equal? x z))))))])
+    (if (not (and
+               (list? card)
+               (equal? 3 (length card))
+               (member? (car card) all-cards)
+               (member? (caar card) all-cards)
+               (member? (caaar card) all-cards)
+               )) #f
+    (foldl all-same-or-diff? #t (car card) (cadr card) (caddr card)))))
+
+; Testdaten
+(display "\n## Aufgabe 3.3 ##\n")
+(define test-set '((2 red oval hatched) 
+                   (2 red rectangle hatched)
+                   (2 red wave hatched)))
+
+(display "is-a-set? should return #t: ")
+(is-a-set? '((2 red oval hatched) 
+             (2 red rectangle hatched)
+             (2 red wave hatched)))
+(display "is-a-set? should return #f: ")
+(is-a-set? '((2 red rectangle outline) 
+             (2 green rectangle outline)
+             (1 green wave solid)))
 
 ; Aufgabe 3.4
+
