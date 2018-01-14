@@ -140,6 +140,7 @@
 ; ändern, dass es einmal für die Klasse Literatur definiert ist, die allgemeinen Angaben ausgibt, und
 ; Ergänzungsmethode für die Unterklassen für die Ausgabe von spezifische Informationen.
 
+
 ; Aufgabe 2.1 und 2.2
 
 (defclass Speichermedium ()
@@ -150,15 +151,15 @@
   (maxLesen  :accessor maxLesen
              :initarg :maxLesen
              :initvalue 0
-             :documentation "Maximale Lesegeschwindkeit eines Speichermediums")
+             :documentation "Maximale Lesegeschwindkeit eines Speichermediums in MByte/s")
   (kapazität :accessor kapazität
              :initarg :kapazität
              :initvalue 0
-             :documentation "Kapazität eines Speichermediums")
+             :documentation "Kapazität eines Speichermediums in GB")
   (lebensd   :accessor lebensdauer
              :initarg :lebensdauer
              :initvalue 0
-             :documentation "Lebensdauer eines Speichermediums")
+             :documentation "Lebensdauer eines Speichermediums in Monaten")
   (mobilität :accessor mobilität
              :initarg :mobilität
              :initvalue ""
@@ -170,32 +171,152 @@
 
 ; Klassen die von Speichermdium erben
 (defclass magnetisch (Speichermedium)
-   (medium :initvalue "magnetisch"))
+   (typ :initvalue "magnetisch"))
 
 (defclass herausnehmbaresOptisches (Speichermedium)
-  (medium :initvalue "optisch"))
+  (typ :initvalue "optisch")
+  )
 
 (defclass Halbleiter (Speichermedium)
-  (medium :initvalue "Halbleiter"))
+  (typ :initvalue "Halbleiter"))
 
 ; Klassen die von bestimmtem Typ Speichermedium erben
 (defclass festverbauteHDD (magnetisch)
-  (Mobilität :initvalue "festverbaut")
-  (Art :initvalue "HDD"))
+  (mobilität :initvalue "fest verbaut")
+  (art :initvalue "HDD"))
 
 (defclass herausnehmbareDiskette (magnetisch)
-  (Mobilität :initvalue "herausnehmbar")
-  (Art :initvalue "Diskette"))
+  (mobilität :initvalue "herausnehmbar")
+  (art :initvalue "Diskette"))
 
-(defclass festverbauter (Halbleiter)
-  (Mobilität :initvalue "festverbaut")
-  (Art      :accessor Art
-            :initarg :Art
-            :initvalue ""
-            :documentation "Art des Speichermediums: SSD oder RAM"))
+(defclass festverbauteSSD (Halbleiter)
+  (mobilität :initvalue "fest verbaut")
+  (art :initvalue "SSD"))
 
-(defclass herausnehmbarer (Halbleiter)
-  (Mobilität :initvalue "herausnehmbar")
-  (Art :initvalue "USB-Stick"))
+(defclass festverbauterRAM (Halbleiter)
+  (mobilität :initvalue "fest verbaut")
+  (art :initvalue "RAM"))
 
+(defclass herausnehmbareSSD (Halbleiter)
+  (mobilität :initvalue "herausnehmbar")
+  (art :initvalue "SSD"))
 
+(defclass herausnehmbarerUSBSTICK (Halbleiter)
+  (mobilität :initvalue "herausnehmbar")
+  (art :initvalue "USB-Stick"))
+
+; Klassen gemischter Speichermedien
+
+(defclass MagnetoOpticalDisc (magnetisch herausnehmbaresOptisches)
+  (mobilität :initvalue "herausnehmbar"))
+
+(defclass SSHD (festverbauteHDD festverbauteSSD))
+
+(defclass Bankkarte (Halbleiter)
+  (mobilität :initvalue "herausnehmbar"))
+
+; generische Klassen 
+; 1. Abfrage des Speichertyps auf dem die Daten gesichert werden
+(defgeneric show-typ ((s Speichermedium)))
+; 2. Abfrage der Maximallesegeschwindigkeit
+(defgeneric show-maxLesen ((s Speichermedium)))
+; 3. Abfrage der Kapazität (Speicherplatz)
+(defgeneric show-kapazität ((s Speichermedium)))
+; 4. Abfrage der durchschnittlichen Lebensdauer
+(defgeneric show-lebensd ((s Speichermedium)))
+; 5. Abfrage der Mobilität.
+(defgeneric show-art ((s Speichermedium)))
+
+; Aufgabe 2.3
+; Abfrage der Kapazität
+(defmethod show-kapazität ((fvHDD festverbauteHDD))
+  (string-append "festverbaute HDD: " (number->string (kapazität fvHDD)) " GB"))
+
+(defmethod show-kapazität ((fvSSD festverbauteSSD))
+  (string-append "festverbaute SSD: " (number->string (kapazität fvSSD)) " GB"))
+
+(defmethod show-kapazität ((hSSD herausnehmbareSSD))
+  (string-append "herausnehmbare SSD: " (number->string (kapazität hSSD)) " GB"))
+
+(defmethod show-kapazität ((hDiskette herausnehmbareDiskette))
+  (string-append "herausnehmbare Diskette: " (number->string (kapazität hDiskette)) " GB"))
+
+(defmethod show-kapazität ((fvRAM festverbauterRAM))
+  (string-append "festverbauter RAM: " (number->string (kapazität fvRAM)) " GB"))
+
+(defmethod show-kapazität ((hUSB herausnehmbarerUSBSTICK))
+  (string-append "herausnehmbarer USB: " (number->string (kapazität hUSB)) " GB"))
+
+(defmethod show-kapazität ((MOD MagnetoOpticalDisc))
+  (string-append "MagnetoOpticalDisc: " (number->string (kapazität MOD)) " GB"))
+
+(defmethod show-kapazität ((SD SSHD))
+  (string-append "SSHD: " (number->string (kapazität SD)) " GB"))
+
+(defmethod show-kapazität ((BK Bankkarte))
+  (string-append "Bankkarte: " (number->string (kapazität BK)) " GB"))
+
+; definierte Speichermedien
+(define HDD (make festverbauteHDD
+      :maxLesen 200
+      :kapazität 500
+      :lebensd 5))
+
+(define SSDverbaut (make festverbauteSSD
+      :maxLesen 500
+      :kapazität 250
+      :lebensd 10))
+
+(define SSDentfernbar (make herausnehmbareSSD
+      :maxLesen 400
+      :kapazität 500
+      :lebensd 10))
+
+(define Diskette (make herausnehmbareDiskette
+      :maxLesen 120
+      :kapazität 50
+      :lebensd 3))
+
+(define RAM (make festverbauterRAM
+      :maxLesen 120
+      :kapazität 2
+      :lebensd 8))
+
+(define USBSTICK (make herausnehmbarerUSBSTICK
+      :maxLesen 300
+      :kapazität 8
+      :lebensd 4))
+
+(define MagnetoOpticalDisc1 (make MagnetoOpticalDisc
+      :maxLesen 200
+      :kapazität 125
+      :lebensd 3))
+
+(define SSHD1 (make SSHD
+      :maxLesen 200
+      :kapazität 1000
+      :lebensd 2))
+
+(define Karte (make Bankkarte
+      :maxLesen 100
+      :kapazität 0.1
+      :lebensd 2))
+
+; Beispielaufrufe
+(display (show-kapazität HDD))
+(display "\n\n")
+(display (show-kapazität SSDverbaut))
+(display "\n\n")
+(display (show-kapazität SSDentfernbar))
+(display "\n\n")
+(display (show-kapazität Diskette))
+(display "\n\n")
+(display (show-kapazität RAM))
+(display "\n\n")
+(display (show-kapazität USBSTICK))
+(display "\n\n")
+(display (show-kapazität MagnetoOpticalDisc1))
+(display "\n\n")
+(display (show-kapazität SSHD1))
+(display "\n\n")
+(display (show-kapazität Karte))
