@@ -142,31 +142,31 @@
 
 ; Aufgabe 2.1 und 2.2
 
-(defclass Speichermedien ()
-  (typ      :accessor typ
-            :initarg :typ
-            :initvalue ""
-            :documentation "Speichertyp eines Speichermediums")
-  (maxLesen :accessor maxLesen
-            :initarg :maxLesen
-            :initvalue 0
-            :documentation "Maximale Lesegeschwindkeit eines Speichermediums")
-  (kapazität:accessor kapazität
-            :initarg :kapazität
-            :initvalue 0
-            :documentation "Kapazität eines Speichermediums")
-  (lebensd  :accessor lebensdauer
-            :initarg :lebensdauer
-            :initvalue 0
-            :documentation "Lebensdauer eines Speichermediums")
-  (mobilität:accessor mobilität
-            :initarg :mobilität
-            :initvalue ""
-            :documentation "Mobilität eines Speichermediums")
-  (art      :accessor art
-            :initarg :art
-            :initvalue ""
-            :documentation "Art eines Speichermediums, bsp.: SSD, HDD, CD"))
+(defclass Speichermedium ()
+  (typ       :accessor typ
+             :initarg :typ
+             :initvalue ""
+             :documentation "Speichertyp eines Speichermediums")
+  (maxLesen  :accessor maxLesen
+             :initarg :maxLesen
+             :initvalue 0
+             :documentation "Maximale Lesegeschwindkeit eines Speichermediums")
+  (kapazität :accessor kapazität
+             :initarg :kapazität
+             :initvalue 0
+             :documentation "Kapazität eines Speichermediums")
+  (lebensd   :accessor lebensdauer
+             :initarg :lebensdauer
+             :initvalue 0
+             :documentation "Lebensdauer eines Speichermediums")
+  (mobilität :accessor mobilität
+             :initarg :mobilität
+             :initvalue ""
+             :documentation "Mobilität eines Speichermediums")
+  (art       :accessor art
+             :initarg :art
+             :initvalue ""
+             :documentation "Art eines Speichermediums, bsp.: SSD, HDD, CD"))
 
 ; Klassen die von Speichermdium erben
 (defclass magnetisch (Speichermedium)
