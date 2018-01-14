@@ -3,7 +3,8 @@
          swindle/misc )
 
 ; Dokumentation für swindle findet man hier: http://barzilay.org/Swindle
-; Aufgabe 1
+
+; Aufgabe 1.1
 
 (defclass Literatur ()
   (id :accessor id
@@ -18,9 +19,9 @@
         :initarg :jahr
         :initvalue 1900
         :documentation "Erscheinungsjahr")
-  (autoren :accessor autoren 
-           :initarg :autoren
-           :initvalue '()
+  (autor :accessor autor 
+           :initarg :autor
+           :initvalue ""
            :documentation "Namen der Authoren bzw. Authorinnen"))
 
 (defclass Buch (Literatur)
@@ -74,17 +75,17 @@
       :id 1
       :titel "Mein Leben im Loch Ness: Verfolgt als Ungeheuer"
       :jahr 1790
-      :autoren (list "Nessie")
+      :autor "Nessie"
       :verlag "Minority-Verlag"
       :verlag-ort "Inverness"
-      :reihe "Die besondere Biographie."
+      :reihe "Die besondere Biographie"
       :serien-nr 1))
 
 (define ein-sammelband (make Sammelband
       :id 2
-      :titel "Mostly harmless - some observations concerning the third planet of the solar system."
+      :titel "Mostly harmless - some observations concerning the third planet of the solar system"
       :jahr 1979
-      :autoren (list "Perfect, F")
+      :autor "Perfect, F"
       :verlag "Galactic Press"
       :verlag-ort "Vega-System, 3rd planet"
       :reihe "Travel in Style"
@@ -96,8 +97,34 @@
       :id 3
       :titel "Zeitmaschinen leicht gemacht"
       :jahr 3200
-      :autoren (list "Wells, H. G.")
+      :autor "Wells, H. G."
       :band-name "Heimwerkerpraxis für Anfänger"
       :band-nr 3
       :heft-nr 500))
 
+; Aufgabe 1.2
+
+(defgeneric cite ((lit Literatur)))
+
+(defmethod cite ((b Buch))
+  (string-append (autor b) " (" (number->string (jahr b)) "). "
+                 (titel b) ", Band " (number->string (serien-nr b))
+                 " der Reihe: " (reihe b) ". " (verlag b) ", " (verlag-ort b) "."))
+
+(defmethod cite ((s Sammelband))
+  (string-append (autor s) " (" (number->string (jahr s)) "). "
+                 (titel s) ". In " (herausgeber s) ", Band " (number->string (serien-nr s))
+                 " der Reihe: " (reihe s) ". " (verlag s) ", " (verlag-ort s) ", p. "
+                 (number->string (seiten s)) "."))
+
+(defmethod cite ((z Zeitschriftenartikel))
+  (string-append (autor z) " (" (number->string (jahr z)) "). "
+                 (titel z) ". " (band-name z) ", " (number->string (heft-nr z))
+                 "(" (number->string (band-nr z)) ")."))
+
+(display (cite ein-buch))
+(display "\n\n")
+(display (cite ein-sammelband))
+(display "\n\n")
+(display (cite ein-zeitschirftenartikel))
+(display "\n\n")
