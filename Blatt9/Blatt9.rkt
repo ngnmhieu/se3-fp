@@ -140,6 +140,62 @@
 ; ändern, dass es einmal für die Klasse Literatur definiert ist, die allgemeinen Angaben ausgibt, und
 ; Ergänzungsmethode für die Unterklassen für die Ausgabe von spezifische Informationen.
 
-; Aufgabe 2.1
+; Aufgabe 2.1 und 2.2
+
+(defclass Speichermedien ()
+  (typ      :accessor typ
+            :initarg :typ
+            :initvalue ""
+            :documentation "Speichertyp eines Speichermediums")
+  (maxLesen :accessor maxLesen
+            :initarg :maxLesen
+            :initvalue 0
+            :documentation "Maximale Lesegeschwindkeit eines Speichermediums")
+  (kapazität:accessor kapazität
+            :initarg :kapazität
+            :initvalue 0
+            :documentation "Kapazität eines Speichermediums")
+  (lebensd  :accessor lebensdauer
+            :initarg :lebensdauer
+            :initvalue 0
+            :documentation "Lebensdauer eines Speichermediums")
+  (mobilität:accessor mobilität
+            :initarg :mobilität
+            :initvalue ""
+            :documentation "Mobilität eines Speichermediums")
+  (art      :accessor art
+            :initarg :art
+            :initvalue ""
+            :documentation "Art eines Speichermediums, bsp.: SSD, HDD, CD"))
+
+; Klassen die von Speichermdium erben
+(defclass magnetisch (Speichermedium)
+   (medium :initvalue "magnetisch"))
+
+(defclass herausnehmbaresOptisches (Speichermedium)
+  (medium :initvalue "optisch"))
+
+(defclass Halbleiter (Speichermedium)
+  (medium :initvalue "Halbleiter"))
+
+; Klassen die von bestimmtem Typ Speichermedium erben
+(defclass festverbauteHDD (magnetisch)
+  (Mobilität :initvalue "festverbaut")
+  (Art :initvalue "HDD"))
+
+(defclass herausnehmbareDiskette (magnetisch)
+  (Mobilität :initvalue "herausnehmbar")
+  (Art :initvalue "Diskette"))
+
+(defclass festverbauter (Halbleiter)
+  (Mobilität :initvalue "festverbaut")
+  (Art      :accessor Art
+            :initarg :Art
+            :initvalue ""
+            :documentation "Art des Speichermediums: SSD oder RAM"))
+
+(defclass herausnehmbarer (Halbleiter)
+  (Mobilität :initvalue "herausnehmbar")
+  (Art :initvalue "USB-Stick"))
 
 
