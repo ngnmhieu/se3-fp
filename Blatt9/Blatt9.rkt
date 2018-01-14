@@ -128,3 +128,18 @@
 (display "\n\n")
 (display (cite ein-zeitschirftenartikel))
 (display "\n\n")
+
+; Aufgabe 1.3
+; Ergänzungsmethode werden eingesetzt, wenn man eine Methode in der Oberklasse wiederverwenden möchte.
+; Im Unterschied zu dem 'super'-Aufruf wie in Java, indem man die Methode der Oberklasse überschreibt
+; und 'super' nutzt, um diese aufzurufen, definiert man zusätzliche Methode, die davor oder danach
+; aufgerufen werden. Vorteil davon wäre, dass es keinen Flüchtigkeitsfehler gibt, wie z.B. dass man
+; vergisst super aufzurufen - es wird sichergestellt dass alle Ergänzungsmethode aufgerufen werden.
+
+; Um Ergänzungsmethode in unseren Aufgaben verwenden zu können, lässt sich z.B. die Methode cite so
+; ändern, dass es einmal für die Klasse Literatur definiert ist, die allgemeinen Angaben ausgibt, und
+; Ergänzungsmethode für die Unterklassen für die Ausgabe von spezifische Informationen.
+
+; Aufgabe 2.1
+
+
