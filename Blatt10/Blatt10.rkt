@@ -43,9 +43,9 @@
          [offset (+ col-offset (* row-offset 9))])
     (map (curry + offset) base-quadrant)))
 
-(~a "quadrant->indizes 0: " (quadrant->indizes 0))
-(~a "quadrant->indizes 4: " (quadrant->indizes 4))
-(~a "quadrant->indizes 8: " (quadrant->indizes 8))
+; (~a "quadrant->indizes 0: " (quadrant->indizes 0))
+; (~a "quadrant->indizes 4: " (quadrant->indizes 4))
+; (~a "quadrant->indizes 8: " (quadrant->indizes 8))
 
 ; 1.1.3
 (define (spiel->eintraege spiel indizes)
@@ -140,44 +140,20 @@
 
 ; Testdaten
 (display "(eindeutige-positionen spiel 2)\n")
-(eindeutige-positionen spiel 2)
-(display "(eindeutige-positionen spiel 5)\n")
+(eindeutige-positionen spiel 2) ; (display "(eindeutige-positionen spiel 5)\n")
 (eindeutige-positionen spiel 5)
 
 ; 1.2.3
-(define (loese-spiel original-spiel)
-  (letrec ([loese-recursive
-             (lambda (spiel)
-               (let ([setze (lambda (i s)
-                              (let ([positionen (eindeutige-positionen s i)])
-                                (for ([pos positionen]) (vector-set! s pos i))
-                                s))])
-                 (if (spiel-geloest? spiel) spiel
-                   (loese-recursive (foldl setze spiel (range 1 10))))))])
-    (loese-recursive (vector-copy original-spiel))))
+(define (loese-spiel spiel)
+  (let ([setze (lambda (i s)
+                 (let ([positionen (eindeutige-positionen s i)])
+                   (for ([pos positionen]) (vector-set! s pos i))
+                   s))])
+    (if (spiel-geloest? spiel) spiel
+      (let ([next-spiel (foldl setze (vector-copy spiel) (range 1 10))])
+        (if (equal? spiel next-spiel) #f
+          (loese-spiel next-spiel))))))
 
 ; Testdaten
-(define sample-spiel #(2 3 0 0 0 0 0 7 0
-                       0 0 0 6 0 0 0 9 0
-                       0 0 9 2 0 0 5 0 0
-                       3 0 0 8 4 0 0 0 0
-                       0 8 0 0 1 0 0 3 0
-                       0 0 0 0 2 7 0 0 6
-                       0 0 1 0 0 9 4 0 0
-                       0 2 3 0 0 8 0 0 0
-                       0 7 0 0 0 0 0 6 3))
-
-(define sample-spiel-loesung #(2 3 8 5 9 4 6 7 1
-                               4 5 7 6 8 1 3 9 2
-                               6 1 9 2 7 3 5 4 8
-                               3 9 2 8 4 6 1 5 7
-                               7 8 6 9 1 5 2 3 4
-                               1 4 5 3 2 7 9 8 6
-                               8 6 1 7 3 9 4 2 5
-                               5 2 3 4 6 8 7 1 9
-                               9 7 4 1 5 2 8 6 3))
-; (display "(loese-spiel spiel): \n")
-; (loese-spiel spiel)
-
-(display "(loese-spiel sample-spiel): \n")
-(eindeutige-positionen sample-spiel 9)
+(display "(loese-spiel spiel): \n")
+(loese-spiel spiel)
